@@ -1,0 +1,81 @@
+#######################################################
+# Enums
+#######################################################
+enum RoleLookupType {
+  userID
+  roleName
+}
+
+enum PossibleRoles {
+  Superuser
+  Admin
+  User
+}
+
+#######################################################
+# Directives
+#######################################################
+directive @auth on OBJECT | QUERY | FIELD_DEFINITION
+directive @role(
+  requires: PossibleRoles = Admin
+) on OBJECT | QUERY | FIELD_DEFINITION
+
+#######################################################
+# Types
+#######################################################
+type User {
+  id: Int!
+  name: String
+  username: String!
+  email: String!
+  role: Role
+}
+
+type Role @auth {
+  id: Int!
+  userId: Int!
+  name: String!
+  user: User!
+}
+
+type LoginToken {
+  token: String
+  refreshToken: String
+}
+
+#######################################################
+# Mutations
+#######################################################
+type Mutation {
+  register(
+    name: String
+    username: String!
+    email: String!
+    password: String!
+  ): LoginToken!
+  login(username: String!, password: String!): LoginToken
+  refreshToken(refreshToken: String!): LoginToken
+
+  createUser(name: String!, email: String!, password: String!): User!
+    @role(requires: Admin)
+  grantRole(userId: Int!, roleName: String!): Role! @role(requires: Admin)
+}
+
+#######################################################
+# Queries
+#######################################################
+type Query @role(requires: User) {
+  profile: User!
+
+  #######################################################
+  # Admin Queries
+  #######################################################
+  user(id: Int!): User @role(requires: Admin)
+  role(userId: Int!): [Role] @role(requires: Admin)
+  rolesByName(roleName: String!): [Role] @role(requires: Admin)
+
+  allUsers: [User!]! @role(requires: Admin)
+  allRoles: [Role]! @role(requires: Admin)
+
+  readError: String
+}
