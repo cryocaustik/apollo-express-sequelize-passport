@@ -5,20 +5,24 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon ./src",
-    "dbsetup": "yarn sequelize db:migrate && yarn sequelize db:seed:all"
+    "migrate": "yarn sequelize db:migrate",
+    "seed": "yarn sequelize db:seed:all"
   },
   "dependencies": {
     "apollo-server-express": "^2.16.1",
     "bcryptjs": "^2.4.3",
     "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
+    "express-winston": "^4.0.5",
     "graphql": "^15.3.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "path": "^0.12.7",
-    "sequelize": "^6.3.4"
+    "sequelize": "^6.3.4",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4",

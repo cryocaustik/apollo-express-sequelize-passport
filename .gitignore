@@ -1,7 +1,10 @@
 **/.vscode
 **/dist
 **/node_modules
+**/logs
 
 .env
 *.sqlite
 *.db
+
+!.gitkeep
